@@ -5,7 +5,7 @@ function myTimer() {
         let date = new Date(seconds * 1000)
         return date.toLocaleTimeString('pt-BR', {
             hour12: false,
-            timeZone: 'UTC'
+            timeZone: 'UTC',
         });
     }
 
@@ -19,7 +19,7 @@ function myTimer() {
     }
 
     let interval;
-    let seconds = 0
+    let seconds = 0;
     function startTimer() {
         if (!interval) {
             console.log('Start Timer!')
@@ -28,7 +28,7 @@ function myTimer() {
             interval = setInterval(function() {
                 seconds++
                 updateTimerDisplay(seconds)
-            }, 10);
+            }, 1000);
         }
     }
 
