@@ -1,63 +1,64 @@
-const timer = document.querySelector('#timer')
-const startButton = document.querySelector('#start')
-const pauseButton = document.querySelector('#pause')
-const resetButton = document.querySelector('#reset')
+function myTimer() {
+    const timer = document.querySelector('#timer')
 
-let interval = null;
-let hours = minutes = seconds = 0
-
-const formatTime = function(hours, minutes, seconds) {
-    hr = String(hours).padStart(2, '0')
-    min = String(minutes).padStart(2, '0')
-    sec = String(seconds).padStart(2, '0')
-
-    return `${hr}:${min}:${sec}`
-}
-
-const pauseTimer = function() {
-    clearInterval(interval);
-    interval = null
-}
-
-const updateTimerDisplay = function(hours, minutes, seconds) {
-    timer.innerHTML = formatTime(hours, minutes, seconds)
-}
-
-startButton.addEventListener('click', function(event) {
-    // TODO: Separar a lógica principal do timer
-    if (!interval) {
-        console.log('Start Timer!')
-        timer.style.color = 'black' 
-        
-        interval = setInterval(function() {
-            seconds++
-            if (seconds > 59) {
-                seconds = 0
-                minutes++
-            }
-
-            if (minutes > 59) {
-                minutes = 0
-                hours++
-            }
-
-            updateTimerDisplay(hours, minutes, seconds)
-        }, 10);
+    function formatTime(seconds) {
+        let date = new Date(seconds * 1000)
+        return date.toLocaleTimeString('pt-BR', {
+            hour12: false,
+            timeZone: 'UTC'
+        });
     }
-});
 
-pauseButton.addEventListener('click', function(event) {
-    if (interval) {
-        console.log('Pause Timer!')
-        pauseTimer()
-        timer.style.color = 'red' 
+    function updateTimerDisplay(seconds) {
+        timer.innerHTML = formatTime(seconds);
     }
-});
 
-resetButton.addEventListener('click', function(event) {
-    console.log('Reset Timer!')
-    pauseTimer()
-    hours = minutes = seconds = 0
-    updateTimerDisplay(hours, minutes, seconds)
-    timer.style.color = 'black' 
-});
+    function clearTimer() {
+        clearInterval(interval);
+        interval = null
+    }
+
+    let interval;
+    let seconds = 0
+    function startTimer() {
+        if (!interval) {
+            console.log('Start Timer!')
+            timer.classList.remove('pause-timer')
+            
+            interval = setInterval(function() {
+                seconds++
+                updateTimerDisplay(seconds)
+            }, 10);
+        }
+    }
+
+    function pauseTimer() {
+        if (interval) {
+            console.log('Pause Timer!')
+            timer.classList.add('pause-timer')
+            clearTimer();
+        }
+    }
+
+    function resetTimer() {
+        console.log('Reset Timer!')
+        seconds = 0
+        updateTimerDisplay(seconds)
+        timer.classList.remove('pause-timer')
+        clearTimer()
+    }
+
+    document.addEventListener('click', function(event) {
+        let el = event.target;
+        if (el.id == 'start') {
+            startTimer();
+        }
+        if (el.id == 'pause') {
+            pauseTimer();
+        }
+        if (el.id == 'reset') {
+            resetTimer();
+        }
+    });
+}
+myTimer();

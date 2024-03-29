@@ -63,3 +63,7 @@ form button:hover {
 .timer {
   font-size: 3em;
 }
+
+.pause-timer {
+  color: red;
+}
